@@ -4,150 +4,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina de Pedidos</title>
+    <title>Página de Pedidos</title>
     <link rel="stylesheet" href="assets/style/pedidos.css">
+
 </head>
 
 <body>
-    <header>
-        <div class="lado">
+    <header class="main-header">
+        <div class="brand-container">
             <picture>
                 <img src="assets/images/ulbra-logo.png" alt="Logo da Ulbra">
             </picture>
-            <h1>
-                Ulbra <br> Delivery
-            </h1>
+            <h1>Ulbra <br> Delivery</h1>
         </div>
-        <nav>
+        <nav class="main-nav">
             <ul>
-                <li>
-                    <a href="index.html">Home</a>
-                </li>
-                <li>
-                    <a href="#"     >Cardápios</a>
-                </li>
-                <li>
-                    <a href="#">Pedidos</a>
-                </li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Cardápios</a></li>
+                <li><a href="#">Pedidos</a></li>
                 <li>
                     <picture>
-                        <a href=""><img src="assets/images/shopping-basket.svg" alt=""></a>
+                        <a href="#" id="cart-toggle-btn"><img src="assets/images/shopping-basket.svg" alt="Carrinho"></a>
                     </picture>
                 </li>
             </ul>
         </nav>
     </header>
+
     <main>
-        <section class="container">
-            <div class="grid">
-                <h2>
-                    Espetos
-                </h2>
-                <span class="bordaBlack">
-
-                </span>
+        <section class="products-container">
+            <div class="product-card">
+                <h2>Churros</h2>
+                <span class="product-divider"></span>
                 <picture>
-                        <img src="assets/images/espeto_carne.webp" alt="">
+                    <img src="assets/images/churros.webp" alt="Churros">
                 </picture>
-                <div class="juntar">
-                    <div class="metade1">
-                        <p>
-                            Simples
-                        </p>
-                        <p>
-                            Completo
-                        </p>
+                <div class="product-options">
+                    <div class="option-labels">
+                        <p>Chocolate</p>
+                        <p>Doce de Leite</p>
                     </div>
-                    <div class="metade2">
-                        <p>
-                            R$ 10,00
-                        </p>
-                        <p>
-                            R$ 25,00
-                        </p>
+                    <div class="option-prices">
+                        <p>R$ 08,00</p>
+                        <p>R$ 08,00</p>
                     </div>
                 </div>
-                <button>
-                    Simples
-                </button>
-                <button>
-                    Completo
-                </button>
-
+                <button class="btn-add-cart churros_chocolate">Chocolate</button>
+                <button class="btn-add-cart churros_doce_leite">Doce de Leite</button>
             </div>
-            <div class="grid">
-                <h2>
-                    Espetos
-                </h2>
-                <span class="bordaBlack">
 
-                </span>
+            <div class="product-card">
+                <h2>Espetos</h2>
+                <span class="product-divider"></span>
                 <picture>
-                        <img src="assets/images/espeto_carne.webp" alt="">
+                    <img src="assets/images/espeto_carne.webp" alt="Espeto de Carne">
                 </picture>
-                <div class="juntar">
-                    <div class="metade1">
-                        <p>
-                            Simples
-                        </p>
-                        <p>
-                            Completo
-                        </p>
+                <div class="product-options">
+                    <div class="option-labels">
+                        <p>Simples</p>
+                        <p>Completo</p>
                     </div>
-                    <div class="metade2">
-                        <p>
-                            R$ 10,00
-                        </p>
-                        <p>
-                            R$ 25,00
-                        </p>
+                    <div class="option-prices">
+                        <p>R$ 10,00</p>
+                        <p>R$ 25,00</p>
                     </div>
                 </div>
-                <button>
-                    Simples
-                </button>
-                <button>
-                    Completo
-                </button>
-
+                <button class="btn-add-cart simples_carne">Simples</button>
+                <button class="btn-add-cart completo_carne">Completo</button>
             </div>
-            <div class="grid">
-                <h2>
-                    Espetos
-                </h2>
-                <span class="bordaBlack">
 
-                </span>
+            <div class="product-card">
+                <h2>Pipoca</h2>
+                <span class="product-divider"></span>
                 <picture>
-                        <img src="assets/images/espeto_carne.webp" alt="">
+                    <img src="assets/images/pipoca.jpg" alt="Espeto de Carne">
                 </picture>
-                <div class="juntar">
-                    <div class="metade1">
-                        <p>
-                            Simples
-                        </p>
-                        <p>
-                            Completo
-                        </p>
+                <div class="product-options">
+                    <div class="option-labels">
+                        <p>Simples</p>
+                        <p>Doce</p>
                     </div>
-                    <div class="metade2">
-                        <p>
-                            R$ 10,00
-                        </p>
-                        <p>
-                            R$ 25,00
-                        </p>
+                    <div class="option-prices">
+                        <p>R$ 10,00</p>
+                        <p>R$ 10,00</p>
                     </div>
                 </div>
-               <button>
-                    Simples
-                </button>
-                <button>
-                    Completo
-                </button>
-
+                <button class="btn-add-cart simples">Simples</button>
+                <button class="btn-add-cart doce">Completo</button>
             </div>
         </section>
     </main>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-shrink: 0;">
+            <h2>Seu Carrinho</h2>
+            <button id="close-cart-btn" style="background: transparent; border: none; color: white; font-size: 1.8rem; cursor: pointer; font-weight: bold;">&times;</button>
+        </div>
+
+        <div class="cart-items-container">
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total">
+                
+            </div>
+            <button class="btn-checkout">Finalizar Pedido</button>
+        </div>
+    </aside>
 </body>
+<script src="assets/script/pedidos.js"></script>
 </html>
