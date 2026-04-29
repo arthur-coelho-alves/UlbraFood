@@ -42,7 +42,7 @@ li a{
     padding: 10px 15px;
     color: rgba(255, 255, 255, 0.7);
     transition: color 0.3s ease;
-    display: inline-block; 
+    display: inline-block;
     border-bottom: 2px solid transparent;
 }
 li a:hover{
@@ -67,10 +67,10 @@ main{
 }
 article{
     display: flex;
-    flex-basis: 50%; 
+    flex-basis: 50%;
     flex-grow: 1;
     flex-direction: column;
-    justify-content: center; 
+    justify-content: center;
 }
 article p, strong{
     font-size: 2rem;
@@ -82,7 +82,7 @@ article picture{
 }
 article picture img{
     width: 100%;
-    height: 100%;  
+    height: 100%;
     object-fit: cover;
     object-position: center;
     border-radius: 15px;
