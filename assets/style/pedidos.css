@@ -335,10 +335,11 @@ main {
     left: 0;
     width: 100vw;
     height: 100vh;
+    pointer-events: none;
 }
 
 .fade-out {
-    animation: sumir 0.5s forwards; 
+    animation: sumir 0.5s forwards;
 }
 
 @keyframes sumir {
