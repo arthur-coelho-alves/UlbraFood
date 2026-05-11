@@ -108,11 +108,19 @@
 
         <div class="cart-footer">
             <div class="cart-total">
-                
+
             </div>
             <button class="btn-checkout">Finalizar Pedido</button>
         </div>
     </aside>
 </body>
-<script src="assets/script/pedidos.js"></script>
+<script src="assets/script/pedidos.js">
+    const carrinhoRec = localStorage.getItem('carrinho');
+
+if (carrinhoRec) {
+    console.log("ID recuperado:", carrinhoRec);
+} else {
+    console.log("ID não encontrado no LocalStorage.");
+}
+</script>
 </html>

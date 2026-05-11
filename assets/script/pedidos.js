@@ -1,175 +1,198 @@
-const carrinho = document.getElementById("cart-toggle-btn");
-const fecharCarrinho = document.getElementById("close-cart-btn");
-const overlay = document.querySelector("#cart-overlay");
-const aside = document.querySelector("aside");
-const cartContainer = document.querySelector(".cart-items-container");
-const cart_total = document.querySelector(".cart-total");
+const botaoAbrirCarrinho = document.getElementById("cart-toggle-btn");
+const botaoFecharCarrinho = document.getElementById("close-cart-btn");
+const overlayCarrinho = document.querySelector("#cart-overlay");
+const menuLateralAside = document.querySelector("aside");
+const containerItensCarrinho = document.querySelector(".cart-items-container");
+const elementoTotalCompra = document.querySelector(".cart-total");
 
-const btnSimples = document.querySelector(".simples_carne");
-const btnCompleto = document.querySelector(".completo_carne");
-
+const btnSimplesCarne = document.querySelector(".simples_carne");
+const btnCompletoCarne = document.querySelector(".completo_carne");
 const btnChurrosChocolate = document.querySelector(".churros_chocolate");
 const btnChurrosDoceLeite = document.querySelector(".churros_doce_leite");
-
 const btnPipocaSimples = document.querySelector(".simples");
 const btnPipocaDoce = document.querySelector(".doce");
 
-let id = 0;
-let totalCompra = 0;
+let contadorId = 0;
+let valorTotalCompra = 0;
+let listaProdutosPedido = [];
+const storagePedido = localStorage.getItem("pedido");
 
-carrinho.addEventListener("click", aparecer);
-fecharCarrinho.addEventListener("click", fechar);
-
-function aparecer() {
-    aside.style.display = "flex";
-    overlay.style.display = "block";
+try {
+    if (storagePedido) {
+        listaProdutosPedido = JSON.parse(storagePedido);
+    }
+} catch (erro) {
+    console.error("Erro ao ler localStorage:", erro);
+    listaProdutosPedido = [];
+    localStorage.removeItem("pedido");
 }
 
-function fechar() {
-    aside.style.display = "none";
-    overlay.style.display = "none";
+function salvarNoLocalStorage(chave, valor) {
+    const dadosConvertidos = JSON.stringify(valor);
+    localStorage.setItem(chave, dadosConvertidos);
 }
 
-btnSimples.addEventListener("click", () => {
-    adicionarItem("Espetinho Simples", 10, "assets/images/espeto_carne.webp");
-    mensagem();
-});
+function abrirMenuCarrinho() {
+    menuLateralAside.style.display = "flex";
+    overlayCarrinho.style.display = "block";
+}
 
-btnCompleto.addEventListener("click", () => {
-    adicionarItem("Espetinho Completo", 25, "assets/images/espeto_carne.webp");
-    mensagem();
-});
+function fecharMenuCarrinho() {
+    menuLateralAside.style.display = "none";
+    overlayCarrinho.style.display = "none";
+}
 
-btnChurrosChocolate.addEventListener("click", () => {
-    adicionarItem("Churros Chocolate", 8, "assets/images/churros.webp");
-    mensagem();
-});
+function atualizarDisplayTotal() {
+    elementoTotalCompra.innerHTML = "";
+    const label = document.createElement("span");
+    label.innerHTML = "Total: ";
+    const valor = document.createElement("span");
+    valor.innerHTML = `R$ ${valorTotalCompra.toFixed(2)}`;
+    elementoTotalCompra.append(label, valor);
+}
 
-btnChurrosDoceLeite.addEventListener("click", () => {
-    adicionarItem("Churros Doce de Leite", 8, "assets/images/churros.webp");
-    mensagem();
-});
+function exibirNotificacaoAdicionado() {
+    const corpoPagina = document.querySelector("body");
+    const containerMensagem = document.createElement("div");
+    containerMensagem.classList.add("body2");
+    containerMensagem.style.display = "flex";
 
-btnPipocaSimples.addEventListener("click", () => {
-    adicionarItem("Pipoca Simples", 10, "assets/images/pipoca.jpg");
-    mensagem();
-});
+    const divNotificacao = document.createElement("div");
+    divNotificacao.classList.add("notificacao");
 
-btnPipocaDoce.addEventListener("click", () => {
-    adicionarItem("Pipoca Doce", 10, "assets/images/pipoca.jpg");
-    mensagem();
-});
+    const paragrafo = document.createElement("p");
+    paragrafo.innerHTML = "Produto Adicionado";
 
-function adicionarItem(nome, preco, imgSrc) {
-    const cartItem = document.createElement("div");
-    cartItem.classList.add("cart-item");
+    divNotificacao.append(paragrafo);
+    containerMensagem.append(divNotificacao);
+    corpoPagina.append(containerMensagem);
 
-    const id_atual = "produto-" + id;
-    id++;
-    cartItem.dataset.id = id_atual;
-    cartItem.dataset.preco = preco;
+    setTimeout(() => { containerMensagem.classList.add("fade-out"); }, 1000);
+    setTimeout(() => { containerMensagem.remove(); }, 2000);
+}
+
+function adicionarItemAoCarrinho(nome, preco, caminhoImagem) {
+    const divItem = document.createElement("div");
+    divItem.classList.add("cart-item");
+
+    const idAtual = "produto-" + contadorId;
+    contadorId++;
+
+    divItem.dataset.id = idAtual;
+    divItem.dataset.preco = preco;
 
     const header = document.createElement("div");
     header.classList.add("cart-item-header");
 
     const img = document.createElement("img");
-    img.src = imgSrc;
+    img.src = caminhoImagem;
 
     const title = document.createElement("p");
     title.innerHTML = nome;
 
-    const btnRemove = criarBotaoRemover(id_atual);
+    const btnRemover = criarBotaoRemover(idAtual);
 
-    const details = document.createElement("div");
-    details.classList.add("cart-item-details");
+    const detalhes = document.createElement("div");
+    detalhes.classList.add("cart-item-details");
 
     const spanPreco = document.createElement("span");
     spanPreco.innerHTML = `R$ ${preco.toFixed(2)}`;
 
-    const controls = document.createElement("div");
-    controls.classList.add("cart-item-controls");
+    const controles = document.createElement("div");
+    controles.classList.add("cart-item-controls");
 
-    const btnMinus = document.createElement("button");
-    btnMinus.classList.add("btn-quantity");
-    btnMinus.innerHTML = "-";
+    const btnMenos = document.createElement("button");
+    btnMenos.classList.add("btn-quantity");
+    btnMenos.innerHTML = "-";
 
-    const qtd = document.createElement("span");
-    qtd.innerHTML = "1";
+    const spanQtd = document.createElement("span");
+    spanQtd.innerHTML = "1";
 
-    const btnPlus = document.createElement("button");
-    btnPlus.classList.add("btn-quantity");
-    btnPlus.innerHTML = "+";
+    const btnMais = document.createElement("button");
+    btnMais.classList.add("btn-quantity");
+    btnMais.innerHTML = "+";
 
-    header.append(img, title, btnRemove);
-    controls.append(btnMinus, qtd, btnPlus);
-    details.append(spanPreco, controls);
-    cartItem.append(header, details);
+    header.append(img, title, btnRemover);
+    controles.append(btnMenos, spanQtd, btnMais);
+    detalhes.append(spanPreco, controles);
+    divItem.append(header, detalhes);
 
-    cartContainer.append(cartItem);
+    containerItensCarrinho.append(divItem);
 
-    totalCompra += preco;
-    atualizarTotal();
+    valorTotalCompra += preco;
+    atualizarDisplayTotal();
+    salvarNoLocalStorage("pedido", listaProdutosPedido);
 }
 
-function criarBotaoRemover(id_atual) {
+function criarBotaoRemover(idReferencia) {
     const btn = document.createElement("button");
     btn.classList.add("btn-remove");
     btn.innerHTML = "Remover";
-
     btn.addEventListener("click", () => {
-        removerPorId(id_atual);
+        removerItemPorId(idReferencia);
     });
-
     return btn;
 }
 
-function removerPorId(id) {
-    const item = document.querySelector(`[data-id="${id}"]`);
-
-    if (item) {
-        const preco = Number(item.dataset.preco);
-
-        totalCompra -= preco;
-        item.remove();
-
-        atualizarTotal();
+function removerItemPorId(idElemento) {
+    const elementoHtml = document.querySelector(`[data-id="${idElemento}"]`);
+    if (elementoHtml) {
+        const precoItem = Number(elementoHtml.dataset.preco);
+        valorTotalCompra -= precoItem;
+        elementoHtml.remove();
+        atualizarDisplayTotal();
     }
 }
 
-function atualizarTotal() {
-    cart_total.innerHTML = "";
+botaoAbrirCarrinho.addEventListener("click", abrirMenuCarrinho);
+botaoFecharCarrinho.addEventListener("click", fecharMenuCarrinho);
 
-    const label = document.createElement("span");
-    label.innerHTML = "Total: ";
+btnSimplesCarne.addEventListener("click", () => {
+    listaProdutosPedido.push(["Espetinho Simples", 10, "assets/images/espeto_carne.webp"]);
+    adicionarItemAoCarrinho("Espetinho Simples", 10, "assets/images/espeto_carne.webp");
+    exibirNotificacaoAdicionado();
+});
 
-    const value = document.createElement("span");
-    value.innerHTML = `R$ ${totalCompra.toFixed(2)}`;
+btnCompletoCarne.addEventListener("click", () => {
+    listaProdutosPedido.push(["Espetinho Completo", 25, "assets/images/espeto_carne.webp"]);
+    adicionarItemAoCarrinho("Espetinho Completo", 25, "assets/images/espeto_carne.webp");
+    exibirNotificacaoAdicionado();
+});
 
-    cart_total.append(label, value);
-}
-function mensagem(){
-    const body = document.querySelector("body")
+btnChurrosChocolate.addEventListener("click", () => {
+    listaProdutosPedido.push(["Churros Chocolate", 8, "assets/images/churros.webp"]);
+    adicionarItemAoCarrinho("Churros Chocolate", 8, "assets/images/churros.webp");
+    exibirNotificacaoAdicionado();
+});
 
-    const body2 = document.createElement("div");
-    body2.classList.add("body2");
-    body2.style.display = "flex"
-    const divNotificacao = document.createElement("div")
-     divNotificacao.classList.add("notificacao");
-     body2.append(divNotificacao);
-     body.append(body2)
+btnChurrosDoceLeite.addEventListener("click", () => {
+    listaProdutosPedido.push(["Churros Doce de Leite", 8, "assets/images/churros.webp"]);
+    adicionarItemAoCarrinho("Churros Doce de Leite", 8, "assets/images/churros.webp");
+    exibirNotificacaoAdicionado();
+});
 
+btnPipocaSimples.addEventListener("click", () => {
+    listaProdutosPedido.push(["Pipoca Simples", 10, "assets/images/pipoca.jpg"]);
+    adicionarItemAoCarrinho("Pipoca Simples", 10, "assets/images/pipoca.jpg");
+    exibirNotificacaoAdicionado();
+});
 
-     divNotificacao.style.display = "flex";
+btnPipocaDoce.addEventListener("click", () => {
+    listaProdutosPedido.push(["Pipoca Doce", 10, "assets/images/pipoca.jpg"]);
+    adicionarItemAoCarrinho("Pipoca Doce", 10, "assets/images/pipoca.jpg");
+    exibirNotificacaoAdicionado();
+});
 
-     const paragrafo = document.createElement("p")
-     paragrafo.innerHTML = "Produto Adicionado";
-     divNotificacao.append(paragrafo)
-
-
-     setTimeout(() => {
-        body2.classList.add("fade-out");
-},1000);
-     setTimeout(() => {
-        body2.remove()
-}, 2000);
-}
+window.onload = function() {
+    if (listaProdutosPedido.length > 0) {
+        valorTotalCompra = 0;
+        containerItensCarrinho.innerHTML = "";
+        for (let i = 0; i < listaProdutosPedido.length; i++) {
+            adicionarItemAoCarrinho(
+                listaProdutosPedido[i][0],
+                listaProdutosPedido[i][1],
+                listaProdutosPedido[i][2]
+            );
+        }
+    }
+};
